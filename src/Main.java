@@ -39,8 +39,8 @@ public class Main extends JFrame implements KeyListener,ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		timer.start();		
-		container.getFrame().gameEngine();
-		container.getFrame2().gameEngine();
+		container.getFrame().gameEngine(container.getFrame2().getBestScore());
+		container.getFrame2().gameEngine(container.getFrame().getBestScore());
 	}
 
 	@Override

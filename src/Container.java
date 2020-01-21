@@ -15,8 +15,8 @@ public class Container extends JPanel{
 	public Container() {
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		
-	    frame = new Frame();
-	    frame2 = new Frame();
+	    frame = new Frame(1);
+	    frame2 = new Frame(2);
 	      
 	    this.add(frame);
 	    this.add(frame2);

@@ -27,6 +27,8 @@ public class Frame extends JPanel{
 	
 	private int lengthofsnake = 3;
 	
+	private int bestScore = 0;
+	
 	private ImageIcon snakeimage;
 	
 	private int [] fruitxpos = new int [34];
@@ -45,8 +47,11 @@ public class Frame extends JPanel{
 	
 	private boolean gameOver = false;
 	
+	private int playerNum;
 	
-	public Frame() {
+	private int optherPlayerBestScore = 0;
+	
+	public Frame(int playerNum) {
 		for (int i = 0; i < 34; i++) {
 			fruitxpos[i] = 25 + (i * 25);
 		}
@@ -56,6 +61,8 @@ public class Frame extends JPanel{
 		
 		xpos = random.nextInt(16);
 		ypos = random.nextInt(23);
+		
+		this.playerNum = playerNum;
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -84,12 +91,40 @@ public class Frame extends JPanel{
 				//draw score board
 				g.setColor(Color.black);
 				g.setFont(new Font("arial", Font.PLAIN, 14));
-				g.drawString("score: " + getScore(), 100, 30);
+				g.drawString("score: " + getScore(), 25, 30);
 				
 				//draw length of the snake
 				g.setColor(Color.black);
 				g.setFont(new Font("arial", Font.PLAIN, 14));
-				g.drawString("Length: " + getLengthofsnake(), 100, 50);
+				g.drawString("Length: " + getLengthofsnake(), 25, 50);
+				
+				//draw Best Score
+				g.setColor(Color.black);
+				g.setFont(new Font("arial", Font.PLAIN, 20));
+				g.drawString("Best Score: " + getBestScore(), 300, 30);
+				
+				//draw opsite team best score
+				if (optherPlayerBestScore > bestScore) {
+					g.setColor(Color.red);
+				}else if(optherPlayerBestScore < bestScore){
+					Color myGreen = new Color(0, 102, 0);
+					g.setColor(myGreen);
+				}else {
+					g.setColor(Color.black);
+				}
+				
+				g.setFont(new Font("arial", Font.PLAIN, 14));
+				if (playerNum == 1) {
+					g.drawString("Player " + (playerNum + 1) + " Best Score: " + optherPlayerBestScore, 280, 50);
+				}else {
+					g.drawString("Player " + (playerNum - 1) + " Best Score: " + optherPlayerBestScore, 280, 50);
+
+				}
+								
+				//draw PlayerTitle
+				g.setColor(Color.blue);
+				g.setFont(new Font("arial", Font.PLAIN, 35));
+				g.drawString("Player " + playerNum, 140, 40);
 				
 				rightmouth = new ImageIcon("rightmouth.png");
 				rightmouth.paintIcon(this, g, snakeXlength[0], snakeYlength[0]);
@@ -122,6 +157,11 @@ public class Frame extends JPanel{
 				
 				if (fruitxpos[xpos] == snakeXlength [0] && fruitypos[ypos] == snakeYlength[0]) {
 					setScore(getScore() + 1);
+					if (getBestScore() < getScore()) {
+						bestScore = getScore();
+					}
+					
+				
 					setLengthofsnake(getLengthofsnake() + 1);
 					xpos = random.nextInt(16);
 					ypos = random.nextInt(23);
@@ -141,7 +181,12 @@ public class Frame extends JPanel{
 						g.drawString ("Game Over", 80, 300);
 						
 						g.setFont(new Font("arial", Font.BOLD, 20));
-						g.drawString ("Press Space to Restart", 85, 340);
+						if (playerNum == 1) {
+							g.drawString ("Press T to Restart", 95, 340);
+						}else {
+							g.drawString ("Press Space to Restart", 85, 340);
+						}
+						
 					}
 				}
 				
@@ -149,7 +194,9 @@ public class Frame extends JPanel{
 
 	}
 	
-	public void gameEngine() {
+	public void gameEngine(int opsTeamBest) {
+		this.optherPlayerBestScore = opsTeamBest;
+		
 		if (!gameOver) {
 			
 			if (isRight()) {
@@ -292,5 +339,9 @@ public class Frame extends JPanel{
 
 	public void setUp(boolean up) {
 		this.up = up;
+	}
+
+	public int getBestScore() {
+		return bestScore;
 	}
 }
